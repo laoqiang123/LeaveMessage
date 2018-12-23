@@ -76,6 +76,7 @@ public class BoradController {
 	public ModelAndView loadAllBoard() throws SQLException {
 		ModelAndView mav = new ModelAndView();
 		List<com.example.test.javabean.Board> list = bs.selectAllBoard();
+		System.out.println(list.size()+"jjjj");
 		mav.addObject("boards", list);
 		mav.setViewName("show");
 		return mav;

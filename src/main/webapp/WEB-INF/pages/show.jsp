@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -27,9 +27,9 @@
 	<c:forEach var="board" begin="0" step="1" items="${boards}">
 		<tr>
 			<td>${board.user.userName}</td>
-			<td><a href="http://localhost:9999/LeaveMessageSystem/reply/h1">i
+			<td><a href="http://localhost:9999/LeaveMessageSystem/reply/h1?boardId=${board.boardId}">
 					${board.boardName}</a></td>
-			<td>4</td>
+			<td>${board.replyCount}</td>
 			<td>${board.publishDate}</td>
 			<td>2018-07-05</td>
 			<td><a href="">forward</a></td>
@@ -37,6 +37,5 @@
 		</c:forEach>
 		</c:if>
 	</table>
-
 </body>
 </html>

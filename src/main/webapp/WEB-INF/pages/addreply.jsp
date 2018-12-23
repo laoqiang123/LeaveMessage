@@ -6,13 +6,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+<link rel="stylesheet" href="../css/register.css" type="text/css" />
 </head>
 <body>
+<h3>Welcome to addReply!</h3>
 <form:form action="h3" modelAttribute="reply" method="post">
 <table>
 <tr>
 <td><form:label path="replyContent">replyContent:</form:label></td>
 <td><form:input path="replyContent"></form:input></td>
+<td><form:errors cssClass="error" path="replyContent" /></td>
+
 </tr>
 <tr>
 <td>

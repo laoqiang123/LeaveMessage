@@ -15,5 +15,5 @@ public interface ReplyDao {
 
 	int selectReplyCount(Board board) throws SQLException;
 
-	int insertReplyByPublish(Reply reply) throws SQLException;
+	int insertReplyByPublish(Reply reply,Board board) throws SQLException;
 }

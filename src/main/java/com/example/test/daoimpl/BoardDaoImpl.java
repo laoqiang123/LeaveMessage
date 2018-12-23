@@ -37,6 +37,7 @@ public class BoardDaoImpl implements BoardDao {
 	public int selectBoardCountByUserId(User user) throws SQLException {
 		// TODO Auto-generated method stub
 		String sql = "select count(*) from user where userId=? order by publishDate desc limit 5";
+		temple.update(sql);
 		int count = temple.getFetchSize();
 		return count;
 	}
@@ -47,7 +48,7 @@ public class BoardDaoImpl implements BoardDao {
 	@Override
 	public List<Board> selectAllBoard() throws SQLException {
 		// TODO Auto-generated method stub
-		String sql = "select userName,boardId,boardName,publishDate from user,board where user.userId=board.userId";
+		String sql = "select count(*) as count,userName,board.boardId,boardName,board.publishDate from user,board,reply where user.userId=board.userId and board.boardId = reply.boardId";
 		List<Board> list = temple.query(sql, new BoardRowMapper());
 		if (list.size() == 0) {
 			return null;
@@ -66,6 +67,18 @@ public class BoardDaoImpl implements BoardDao {
 		int row = temple.update(sql, board.getBoardName(), board.getBoardContent(), board.getUser().getUserId(),
 				new Date());
 		return row;
+	}
+
+	@Override
+	public Board selectBoardByBoardId(Board board) throws SQLException {
+		// TODO Auto-generated method stub
+		String sql = "select * from board where boardId=?";
+		List<Board> list = temple.query(sql, new BoardRowMapper(),board.getBoardId());
+		if (list.size() == 0) {
+			return null;
+		} else {
+			return list.get(0);
+		}
 	}
 
 }

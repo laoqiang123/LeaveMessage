@@ -1,6 +1,7 @@
 package com.example.test.daoimpl;
 
 import java.sql.SQLException;
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -52,10 +53,10 @@ public class ReplyDaoImpl implements ReplyDao {
      *Ìí¼ÓÐÂ»Ø¸´
      */
 	@Override
-	public int insertReplyByPublish(Reply reply) throws SQLException {
+	public int insertReplyByPublish(Reply reply,Board board) throws SQLException {
 		// TODO Auto-generated method stub
-		String sql="insert into reply(replyContent) values(?)";
-		int row = temple.update(sql);
+		String sql="insert into reply(replyContent,boardId,publishDate) values(?,?,?)";  
+		int row = temple.update(sql,reply.getReplyContent(),board.getBoardId(),new Date());
 		return row;
 	}
 

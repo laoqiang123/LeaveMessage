@@ -9,27 +9,20 @@
 <body>
   <div align="center">
   <h3>Welcome to visit reply page</h3>
-  <table border="1px" cellpadding="5px" cellspacing="0" bordercolor="blue">
-  <tr>
-  <td>boardName</td>
-  <td><font>boardName</font></td>
-  </tr>
-  <tr>
-  <td>boardContent</td>
-  <td><font>boardContent</font></td>
-  </tr>
-  </table>
-  
-  <div style="border: 1px,solid;height: 300px;width: 300px;margin-top: 5px">
-  <table border="1px" cellpadding="5px" cellspacing="0">
-  <tr>
-  <td><font>there is reply information</font></td>
-  </tr>
-  </table>
-  <a href="" style="align: left">pre page</a>
-  <a href="http://localhost:9999/LeaveMessageSystem/reply/h2" style="align:center">add reply</a>
-  <a href="" style="align: right">next page</a>
+  <div style="border-style:dotted;width: 500px;">
+  <font>boardCotent</font>
   </div>
+  <table  cellpadding="5px"  width="500px" cellspacing="0" style="margin-top: 5px">
+  <tr>
+  <td>one floor:</td>
+  <td colspan="2"><font>there is reply information</font></td>
+  </tr>
+  <tr>
+  <td><a href="" style="align: left">pre page</a></td>
+  <td><a href="http://localhost:9999/LeaveMessageSystem/reply/h2" style="align:center">add reply</a></td>
+  <td><a href="" style="align: right">next page</a></td>
+  </tr>
+  </table>
   <div>
 </body>
 </html>

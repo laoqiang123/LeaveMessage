@@ -35,6 +35,9 @@ public class BoardRowMapper implements RowMapper<Board> {
 			user.setUserName((rs.getString("userName")));
 			board.setUser(user);
 		}
+		if(IsExistColumn.isExistColumn(rs, "count")) {
+			board.setReplyCount(rs.getInt("count"));
+		}
 		return board;
 	}
 

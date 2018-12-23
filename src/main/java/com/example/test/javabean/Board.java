@@ -13,6 +13,7 @@ public class Board {
 	private User user;
 	private String boardContent;
 	private Date publishDate;
+	private Integer replyCount;
 
 	public Date getPublishDate() {
 		return publishDate;
@@ -24,6 +25,14 @@ public class Board {
 
 	public Integer getBoardId() {
 		return boardId;
+	}
+
+	public Integer getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(Integer replyCount) {
+		this.replyCount = replyCount;
 	}
 
 	public void setBoardId(Integer boardId) {

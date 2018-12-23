@@ -45,5 +45,9 @@ public class BoardService {
 		return bdi.selectAllBoard();
 
 	}
+	
+	public Board selectBoardByBoardId(Board board) throws SQLException {
+		return bdi.selectBoardByBoardId(board);
+	}
 
 }
