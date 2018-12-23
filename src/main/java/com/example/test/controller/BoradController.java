@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.test.domain.Board;
+import com.example.test.javabean.Reply;
 import com.example.test.javabean.User;
 import com.example.test.service.BoardService;
+import com.example.test.service.ReplyService;
 
 /**
  * 
@@ -28,9 +31,19 @@ import com.example.test.service.BoardService;
 @RequestMapping(value = "board")
 public class BoradController {
 	private BoardService bs;
+	private ReplyService rs;
 
 	public BoardService getBs() {
 		return bs;
+	}
+
+	public ReplyService getRs() {
+		return rs;
+	}
+
+	@Resource(name = "rs")
+	public void setRs(ReplyService rs) {
+		this.rs = rs;
 	}
 
 	@Resource(name = "bs")
@@ -65,7 +78,7 @@ public class BoradController {
 		b.setUser(u);
 		int row = bs.publish(b);
 		if (row > 0) {
-			return "show";
+			return "redirect:/board/h4";
 		} else {
 			return "publishboard";
 		}
@@ -73,13 +86,51 @@ public class BoradController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/h4")
-	public ModelAndView loadAllBoard() throws SQLException {
+	public ModelAndView loadAllBoard(HttpServletRequest request, ModelMap model) throws SQLException {
 		ModelAndView mav = new ModelAndView();
-		List<com.example.test.javabean.Board> list = bs.selectAllBoard();
-		System.out.println(list.size()+"jjjj");
-		mav.addObject("boards", list);
-		mav.setViewName("show");
-		return mav;
+		int boardcount = bs.selectBoardCount();
+		int pagecount = boardcount % 3 + 1;
+		System.out.println(pagecount + "KKKKK");
+        model.addAttribute("max",pagecount);
+		if (request.getParameter("page") != null) {
+			int page = Integer.parseInt(request.getParameter("page"));
+			model.addAttribute("p", page);
+				System.out.println(page + "pppppppp");
+				List<com.example.test.javabean.Board> list = selectBoardByPage(page);
+				mav.addObject("boards", list);
+				mav.setViewName("show");
+				return mav;
+		}else {
+			model.addAttribute("p", 0);
+			List<com.example.test.javabean.Board> list = selectBoardByPage(0);
+			mav.addObject("boards", list);
+			mav.setViewName("show");
+			return mav;
+		}
+	}
+	
+	public List<com.example.test.javabean.Board> selectBoardByPage(int page) throws SQLException {
+		List<com.example.test.javabean.Board> list = bs.selectAllBoard(page);
+		for (int i = 0; i < list.size(); i++) {
+			List<Reply> listReply = rs.selectPublishDateByBoardId(list.get(i));
+			if (listReply != null) {
+				list.get(i).setRecentReplyDate(listReply.get(0).getPublishDate());
+				list.get(i).setReplyCount(listReply.size());
+			}
+		}
+		return list;
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/h3")
+	public String forwardBoard(HttpServletRequest request, HttpSession session) throws SQLException {
+		com.example.test.javabean.Board board = new com.example.test.javabean.Board();
+		board.setBoardId(Integer.parseInt(request.getParameter("boardId")));
+		int row = bs.insertBoardByForward(board, ((User) session.getAttribute("user")).getUserId());
+		if (row > 0) {
+			return "redirect:/board/h4";
+		} else {
+			System.out.println("forward fail!");
+			return null;
+		}
+	}
 }

@@ -13,8 +13,10 @@ import com.example.test.javabean.User;
  *
  */
 public interface BoardDao {
-	List<Board> selectAllBoard() throws SQLException;
-	int selectBoardCountByUserId(User user) throws SQLException;
+	List<Board> selectAllBoard(int page) throws SQLException;
+	//int selectBoardCountByUserId(User user) throws SQLException;
 	int addBoardByPublish(Board board) throws SQLException;
 	Board selectBoardByBoardId(Board board) throws SQLException;
+	int selectBoardCount () throws SQLException;
+	int insertBoardByForward(Board board,int userId) throws SQLException;
 }

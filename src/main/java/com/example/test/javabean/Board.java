@@ -14,6 +14,16 @@ public class Board {
 	private String boardContent;
 	private Date publishDate;
 	private Integer replyCount;
+	private Date recentReplyDate;
+	
+
+	public Date getRecentReplyDate() {
+		return recentReplyDate;
+	}
+
+	public void setRecentReplyDate(Date recentReplyDate) {
+		this.recentReplyDate = recentReplyDate;
+	}
 
 	public Date getPublishDate() {
 		return publishDate;

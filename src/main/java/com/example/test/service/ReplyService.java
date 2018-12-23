@@ -1,6 +1,7 @@
 package com.example.test.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -33,5 +34,24 @@ public class ReplyService {
 	 */
 	public int insertReplyByBoardId(Reply reply, Board board) throws SQLException {
 		return rdi.insertReplyByPublish(reply, board);
+	}
+
+	/**
+	 * 根据boardid 去查询最近回复的时间
+	 * @param board
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Reply> selectPublishDateByBoardId(Board board) throws SQLException {
+		return rdi.selectReplyRecetPublishDateAndCountByBoardId(board);
+	}
+	/**
+	 *  根据boardId 去查询reply
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Reply> selectReplyByBoardId(Board board) throws SQLException{
+		List<Reply> list = rdi.selectReplyByBoardId(board);
+		return list;
 	}
 }

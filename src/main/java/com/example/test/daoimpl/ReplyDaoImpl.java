@@ -2,6 +2,7 @@ package com.example.test.daoimpl;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -33,31 +34,40 @@ public class ReplyDaoImpl implements ReplyDao {
 	 * 查询某一个Board 下的reply
 	 */
 	@Override
-	public Reply selectReply(Board board) throws SQLException {
+	public List<Reply> selectReplyByBoardId(Board board) throws SQLException {
 		// TODO Auto-generated method stub
 		String sql = "select * from reply where boardId =? order by publishDate desc limit 5";
-        Reply reply =temple.queryForObject(sql, new ReplyRowMapper(),board.getBoardId()); 
-		return reply;
+		List<Reply> list = temple.query(sql, new ReplyRowMapper(), board.getBoardId());
+		if (list.size() == 0) {
+			return null;
+		}
+		return list;
 	}
-    /**
-     * 查询某个用户下的回复数
-     */
+
+	/**
+	 * 添加新回复
+	 */
 	@Override
-	public int selectReplyCount(Board board) throws SQLException {
+	public int insertReplyByPublish(Reply reply, Board board) throws SQLException {
 		// TODO Auto-generated method stub
-		String sql ="select count(*) from user,reply,board where user.userId=board.userId and board.boardId = reply.boardId";
-		int count = temple.getFetchSize();
-		return count;
-	}
-    /**
-     *添加新回复
-     */
-	@Override
-	public int insertReplyByPublish(Reply reply,Board board) throws SQLException {
-		// TODO Auto-generated method stub
-		String sql="insert into reply(replyContent,boardId,publishDate) values(?,?,?)";  
-		int row = temple.update(sql,reply.getReplyContent(),board.getBoardId(),new Date());
+		String sql = "insert into reply(replyContent,boardId,publishDate) values(?,?,?)";
+		int row = temple.update(sql, reply.getReplyContent(), board.getBoardId(), new Date());
 		return row;
+	}
+
+	/**
+	 * 根据boardId 去查询最近的回复的时间,和Board 下的回复数
+	 */
+	@Override
+	public List<Reply> selectReplyRecetPublishDateAndCountByBoardId(Board board) throws SQLException {
+		// TODO Auto-generated method stub
+		String sql = "select publishDate from reply  where boardId =? order by publishDate desc";
+		List<Reply> list = temple.query(sql, new ReplyRowMapper(), board.getBoardId());
+		if (list.size() == 0) {
+			return null;
+		} else {
+			return list;
+		}
 	}
 
 }

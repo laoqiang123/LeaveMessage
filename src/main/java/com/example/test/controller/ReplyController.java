@@ -1,13 +1,13 @@
 package com.example.test.controller;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.Errors;
@@ -57,9 +57,11 @@ public class ReplyController {
 		board.setBoardId(Integer.parseInt(request.getParameter("boardId")));
 		session.setAttribute("boardId", request.getParameter("boardId"));
 		Board b = bs.selectBoardByBoardId(board);
+		List<com.example.test.javabean.Reply> list  = rs.selectReplyByBoardId(board);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("reply");
 		mav.addObject("board", b);
+		mav.addObject("replys",list);
 		return mav;
 	}
 
@@ -82,7 +84,7 @@ public class ReplyController {
 		b.setBoardId(Integer.parseInt((String) session.getAttribute("boardId")));
 		int row = rs.insertReplyByBoardId(r, b);
 		if (row > 0) {
-			return "reply";
+			return "redirect:/reply/h1?boardId="+session.getAttribute("boardId");
 		} else {
 			return "addreply";
 
