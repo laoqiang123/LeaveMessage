@@ -14,7 +14,7 @@
 <td>userid</td>
 <td>the count of subject</td>
 <td>the count of reply</td>
-<input type="button" value="delete"/>
+<input type="button" value="delete"   onclick="window.location.href = 'http://localhost:9999/LeaveMessageSystem/manage/h2'"/>
 </tr>
 </table>
 </body>

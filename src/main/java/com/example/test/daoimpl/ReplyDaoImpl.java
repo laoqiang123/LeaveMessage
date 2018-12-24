@@ -12,6 +12,7 @@ import com.example.test.dao.ReplyDao;
 import com.example.test.javabean.Board;
 import com.example.test.javabean.Reply;
 import com.example.test.javabean.ReplyRowMapper;
+import com.example.test.javabean.User;
 
 /**
  * 
@@ -34,10 +35,10 @@ public class ReplyDaoImpl implements ReplyDao {
 	 * 查询某一个Board 下的reply
 	 */
 	@Override
-	public List<Reply> selectReplyByBoardId(Board board) throws SQLException {
+	public List<Reply> selectReplyByBoardId(Board board, int page) throws SQLException {
 		// TODO Auto-generated method stub
-		String sql = "select * from reply where boardId =? order by publishDate desc limit 5";
-		List<Reply> list = temple.query(sql, new ReplyRowMapper(), board.getBoardId());
+		String sql = "select * from reply where boardId =?  limit ?,3";
+		List<Reply> list = temple.query(sql, new ReplyRowMapper(), board.getBoardId(), page * 3);
 		if (list.size() == 0) {
 			return null;
 		}
@@ -68,6 +69,24 @@ public class ReplyDaoImpl implements ReplyDao {
 		} else {
 			return list;
 		}
+	}
+
+	@Override
+	public int selectReplyCountByUserId(User user) throws SQLException {
+		// TODO Auto-generated method stub
+		String sql = "select count(*) as count from user,board,reply where user.userId = board.userId and board.boardId = reply.boardId and user.userId =?";
+		int count = temple.queryForInt(sql, user.getUserId());
+		return count;
+	}
+    /**
+     * 查询某一个boardId 的回复数
+     */
+	@Override
+	public int selectReplyCountByBoardId(Board board) throws SQLException {
+		// TODO Auto-generated method stub
+		String sql="select count(*) from reply where boardId=?";
+		int count = temple.queryForInt(sql,board.getBoardId());
+		return count;
 	}
 
 }

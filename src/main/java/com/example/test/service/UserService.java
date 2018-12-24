@@ -1,6 +1,7 @@
 package com.example.test.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -73,5 +74,23 @@ public class UserService {
 	 */
 	public int updatePass(User user) throws SQLException {
 		return udi.updateUserByOldPass(user);
+	}
+	/**
+	 * 查询所有的用户
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<User> selectAllUser() throws SQLException{
+		List<User> list = udi.selectAllUser();
+		return list;
+	}
+	/**
+	 * 删除指定的用户
+	 * @param user
+	 * @return
+	 * @throws SQLException
+	 */
+	public int deleteUserByuserId(User user) throws SQLException {
+		return udi.deleteUser(user);
 	}
 }

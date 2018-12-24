@@ -53,16 +53,43 @@ public class ReplyController {
 	@RequestMapping(method = RequestMethod.GET, value = "/h1")
 	public ModelAndView initReply(ModelMap model, HttpServletRequest request, HttpSession session) throws SQLException {
 		model.addAttribute("reply", new Reply());
+		String boardId = null;
+		if (request.getParameter("boardId") == null) {
+			boardId = String.valueOf(session.getAttribute("boardId"));
+		} else {
+			boardId = request.getParameter("boardId");
+			session.setAttribute("boardId", boardId);
+		}
 		Board board = new Board();
-		board.setBoardId(Integer.parseInt(request.getParameter("boardId")));
-		session.setAttribute("boardId", request.getParameter("boardId"));
+		board.setBoardId(Integer.parseInt(boardId));
+		int boardcount = rs.selectReplyCountByBoardId(board);
+		int pagecount = 0;
+		if (boardcount % 3 == 0) {
+			pagecount = boardcount / 3;
+			pagecount -= 1;
+		} else {
+			pagecount = boardcount / 3;
+		}
+		model.addAttribute("max", pagecount);
+		session.setAttribute("boardId", Integer.parseInt(boardId));
 		Board b = bs.selectBoardByBoardId(board);
-		List<com.example.test.javabean.Reply> list  = rs.selectReplyByBoardId(board);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("reply");
 		mav.addObject("board", b);
-		mav.addObject("replys",list);
-		return mav;
+		if (request.getParameter("page") != null) {
+			int page = Integer.parseInt(request.getParameter("page"));
+			model.addAttribute("p", page);
+			List<com.example.test.javabean.Reply> list = rs.selectReplyByBoardId(board, page);
+			mav.setViewName("reply");
+			mav.addObject("replys", list);
+			return mav;
+		} else {
+			model.addAttribute("p", 0);
+			List<com.example.test.javabean.Reply> list = rs.selectReplyByBoardId(board, 0);
+			mav.addObject("boards", list);
+			mav.addObject("replys", list);
+			mav.setViewName("reply");
+			return mav;
+		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/h2")
@@ -81,10 +108,10 @@ public class ReplyController {
 		Board b = new Board();
 		com.example.test.javabean.Reply r = new com.example.test.javabean.Reply();
 		r.setReplyContent(reply.getReplyContent());
-		b.setBoardId(Integer.parseInt((String) session.getAttribute("boardId")));
+		b.setBoardId(Integer.parseInt(String.valueOf(session.getAttribute("boardId"))));
 		int row = rs.insertReplyByBoardId(r, b);
 		if (row > 0) {
-			return "redirect:/reply/h1?boardId="+session.getAttribute("boardId");
+			return "redirect:/reply/h1?boardId=" + session.getAttribute("boardId");
 		} else {
 			return "addreply";
 

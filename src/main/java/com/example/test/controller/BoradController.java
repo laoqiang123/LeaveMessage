@@ -89,18 +89,22 @@ public class BoradController {
 	public ModelAndView loadAllBoard(HttpServletRequest request, ModelMap model) throws SQLException {
 		ModelAndView mav = new ModelAndView();
 		int boardcount = bs.selectBoardCount();
-		int pagecount = boardcount % 3 + 1;
-		System.out.println(pagecount + "KKKKK");
-        model.addAttribute("max",pagecount);
+		int pagecount = 0;
+		if (boardcount % 3 == 0) {
+			pagecount = boardcount / 3;
+			pagecount -= 1;
+		} else {
+			pagecount = boardcount / 3;
+		}
+		model.addAttribute("max", pagecount);
 		if (request.getParameter("page") != null) {
 			int page = Integer.parseInt(request.getParameter("page"));
 			model.addAttribute("p", page);
-				System.out.println(page + "pppppppp");
-				List<com.example.test.javabean.Board> list = selectBoardByPage(page);
-				mav.addObject("boards", list);
-				mav.setViewName("show");
-				return mav;
-		}else {
+			List<com.example.test.javabean.Board> list = selectBoardByPage(page);
+			mav.addObject("boards", list);
+			mav.setViewName("show");
+			return mav;
+		} else {
 			model.addAttribute("p", 0);
 			List<com.example.test.javabean.Board> list = selectBoardByPage(0);
 			mav.addObject("boards", list);
@@ -108,7 +112,7 @@ public class BoradController {
 			return mav;
 		}
 	}
-	
+
 	public List<com.example.test.javabean.Board> selectBoardByPage(int page) throws SQLException {
 		List<com.example.test.javabean.Board> list = bs.selectAllBoard(page);
 		for (int i = 0; i < list.size(); i++) {

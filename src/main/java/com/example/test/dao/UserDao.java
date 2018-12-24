@@ -1,6 +1,7 @@
 package com.example.test.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.example.test.javabean.User;
 
@@ -19,6 +20,8 @@ public interface UserDao {
 	int updateUserByOldPass(User user) throws SQLException;
 
 	int deleteUser(User user) throws SQLException;
-	
+
 	int updateUserByActive(User user) throws SQLException;
+
+	List<User> selectAllUser() throws SQLException;
 }

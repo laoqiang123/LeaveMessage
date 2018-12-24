@@ -46,7 +46,7 @@ public class UserDaoImpl implements UserDao {
 	public int deleteUser(User user) throws SQLException {
 		// TODO Auto-generated method stub
 		String sql = "delete from user where userId=?";
-		int row = temple.update(sql);
+		int row = temple.update(sql, user.getUserId());
 		return row;
 	}
 
@@ -100,6 +100,22 @@ public class UserDaoImpl implements UserDao {
 		String sql = "update user set active=1 where userId=?";
 		int row = temple.update(sql, user.getUserId());
 		return row;
+	}
+
+	/**
+	 * 
+	 * 查询所有的激活用户
+	 */
+	@Override
+	public List<User> selectAllUser() throws SQLException {
+		// TODO Auto-generated method stub
+		String sql = "select userId ,userName from user where active  = 1";
+		List<User> list = temple.query(sql, new UserRowMapper());
+		if (list == null) {
+			return null;
+		} else {
+			return list;
+		}
 	}
 
 }

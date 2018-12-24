@@ -57,6 +57,10 @@ public class LoginController {
 			System.out.println("user login error");
 			return "login";
 		} else {
+			// 管理员进入管理界面
+			if (user.getName().equals("root") && user.getPass().equals("rootroot")) {
+				return "redirect:/manage/h1";
+			}
 			// 将用户的登录信息存放到session 中
 			session.setAttribute("user", u1);
 			return "redirect:/board/h4";

@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.example.test.dao.BoardDao;
 import com.example.test.javabean.Board;
 import com.example.test.javabean.BoardRowMapper;
+import com.example.test.javabean.User;
 
 /**
  * 
@@ -30,13 +31,16 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	/**
-	 * 查询某一个用户下的Board 数
-	 *//*
-		 * @Override public int selectBoardCountByUserId(User user) throws SQLException
-		 * { // TODO Auto-generated method stub String sql =
-		 * "select count(*) from user where userId=? order by publishDate desc limit 5";
-		 * temple.update(sql); int count = temple.getFetchSize(); return count; }
-		 */
+	 * 查询某一个用户下的Board 数,在管理员界面
+	 */
+	@Override
+	public int selectBoardCountByUserId(User user) throws SQLException {
+		// TODO Auto-generated method stub 
+		String sql = "select count(*) as count from board where userId=?";
+		int count = temple.queryForInt(sql,user.getUserId());
+		return count;
+	}
+
 	/**
 	 * 根据页数列出所有的Board
 	 */
@@ -44,7 +48,7 @@ public class BoardDaoImpl implements BoardDao {
 	public List<Board> selectAllBoard(int page) throws SQLException {
 		// TODO Auto-generated method stub
 		String sql = "select boardId ,userName,boardName,publishDate from board,user where user.userId  = board.userId limit ?,3";
-		List<Board> list = temple.query(sql, new BoardRowMapper(),page);
+		List<Board> list = temple.query(sql, new BoardRowMapper(), page*3);
 		if (list.size() == 0) {
 			return null;
 		} else {
@@ -86,13 +90,14 @@ public class BoardDaoImpl implements BoardDao {
 		int row = temple.update(sql, new Date(), userId, board.getBoardId());
 		return row;
 	}
+
 	/**
 	 * 查询有多少board
 	 */
 	@Override
 	public int selectBoardCount() throws SQLException {
 		// TODO Auto-generated method stub
-		String sql ="select count(*) from board";
+		String sql = "select count(*) from board";
 		int count = temple.queryForInt(sql);
 		return count;
 	}

@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 
 import com.example.test.daoimpl.BoardDaoImpl;
 import com.example.test.javabean.Board;
+import com.example.test.javabean.User;
 
 public class BoardService {
 	private BoardDaoImpl bdi;
@@ -65,5 +66,13 @@ public class BoardService {
      */
     public int selectBoardCount() throws SQLException {
     	return bdi.selectBoardCount();
+    }
+    /**
+     * 根据某一个用户去查找它的board数
+     * @return
+     * @throws SQLException 
+     */
+    public int selectBoardCountByUserId(User user) throws SQLException {
+    	return bdi.selectBoardCountByUserId(user);
     }
 }

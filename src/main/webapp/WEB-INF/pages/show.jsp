@@ -54,10 +54,8 @@
 		<c:set var="p" scope="page" value="${p}"></c:set>
 		<tr>
 		<td colspan="3" align="center">
-		<c:out value="${max}"/>
-		<c:out value="${p}"/>
 		<c:choose>
-		<c:when test="${p}<${max}">
+		<c:when test="${p>0}">
 		<a href="<c:url value="/board/h4?page=${p-1}"/>">pre page</a>
 		</c:when>
 		<c:otherwise>
@@ -67,7 +65,7 @@
 		</td>
 		<td colspan="3" align="center">
 		<c:choose>
-		<c:when test="${p}<${max}">
+		<c:when test="${p<max}">
 		<a href="<c:url value="/board/h4?page=${p+1}"/>">next page</a>
 		</c:when>
 		<c:otherwise>

@@ -11,10 +11,28 @@ public class User {
 	private String email;
 	private String userPass;
 	private Integer active;
+	private Integer boardCount;
+	private Integer replyCount;
 
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public Integer getBoardCount() {
+		return boardCount;
+	}
+
+	public void setBoardCount(Integer boardCount) {
+		this.boardCount = boardCount;
+	}
+
+	public Integer getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(Integer replyCount) {
+		this.replyCount = replyCount;
 	}
 
 	public Integer getUserId() {
