@@ -31,6 +31,12 @@
 				<td><form:errors cssClass="error" path="email" /></td>
 			</tr>
 			<tr>
+			<td><form:label path="verification">Verification code</form:label></td>
+			<td><form:input path="verification"></form:input></td>
+			<td><img src="h4" /></td>
+			<td><form:errors cssClass="error" path="verification" /></td>
+			</tr>
+			<tr>
 				<td><input type="submit" value="submit" /></td>
 			</tr>
 		</table>

@@ -77,5 +77,9 @@ public class RegisterController {
 			return "register";
 		}
 	}
+	@RequestMapping(method=RequestMethod.GET,value="/h4")
+	public String getVerification() {
+		return "verification";
+	}
 
 }

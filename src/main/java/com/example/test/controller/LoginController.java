@@ -1,8 +1,11 @@
 package com.example.test.controller;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.test.domain.User;
 import com.example.test.service.UserService;
+import com.example.test.util.ValidationCodeUtil;
 
 @Controller
 @RequestMapping(value = "/login")
@@ -31,10 +35,15 @@ public class LoginController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/h1")
-	public String initLogin(ModelMap model) {
+	public String initLogin(ModelMap model) throws IOException {
 		model.addAttribute("user", new User());
 		return "login";
 	}
+	@RequestMapping(method=RequestMethod.GET,value="/h4")
+	public String getVerification() {
+		return "verification";
+	}
+	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/h2")
 	public String forgetPass(ModelMap model) {
@@ -46,7 +55,9 @@ public class LoginController {
 	public String login(@Valid @ModelAttribute("user") User user, Errors error, HttpSession session)
 			throws SQLException {
 		// 验证用户的信息，根据权限进入相应的界面
-		if (error.hasFieldErrors("name") || error.hasFieldErrors("pass")) {
+		if (error.hasFieldErrors("name") || error.hasFieldErrors("pass")||error.hasFieldErrors("verification")) {
+			return "login";
+		}if(!session.getAttribute("verification").equals(user.getVerification())) {
 			return "login";
 		}
 		com.example.test.javabean.User u = new com.example.test.javabean.User();

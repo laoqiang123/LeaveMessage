@@ -22,6 +22,7 @@ public class User {
 	private String newpass;
 	@NotEmpty(message = "email must not null")
 	private String email;
+	@NotEmpty(message="verification must not null")
 	private String verification;
 
 	public String getVerification() {
