@@ -1,5 +1,6 @@
 package com.example.test.controller;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.UUID;
@@ -7,6 +8,7 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -16,10 +18,12 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.test.domain.User;
 import com.example.test.service.UserService;
 import com.example.test.util.EmailUtil;
+import com.example.test.util.ValidationCodeUtil;
 
 /**
  * 
@@ -48,11 +52,21 @@ public class RegisterController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/h2")
-	public String register(@Valid @ModelAttribute("user") User user, Errors error, HttpSession session)
+	public ModelAndView register(@Valid @ModelAttribute("user") User user, Errors error, HttpSession session)
 			throws AddressException, MessagingException, SQLException {
-		if (error.hasFieldErrors("name") || error.hasFieldErrors("pass") || error.hasFieldErrors("email")) {
-			return "register";
+		ModelAndView mav = new ModelAndView();
+		if (error.hasFieldErrors("name") || error.hasFieldErrors("pass") || error.hasFieldErrors("email")
+				|| error.hasFieldErrors("verification")) {
+			mav.setViewName("register");
+			return mav;
 		}
+		System.out.println(session.getAttribute("registerverificationcode") + "kkkk");
+		if (!session.getAttribute("registerverificationcode").equals(user.getVerification())) {
+			mav.setViewName("register");
+			mav.addObject("registerverificationerrormessage", "register verification is error");
+			return mav;
+		}
+
 		// 进行数据库插入操作，注意数据库字段active 0 未激活
 		// 发送邮件
 		com.example.test.javabean.User u = new com.example.test.javabean.User();
@@ -71,15 +85,22 @@ public class RegisterController {
 			EmailUtil.sendEmail(user.getEmail(), from, "the active link of LeaveMessage System",
 					"Hello,man or woman,please "
 							+ "click the link to active http://localhost:9999/LeaveMessageSystem/active/h1?uuid=" + uuid
-							+ "within three mintues");
-			return "active";
+							+ " " + "within three mintues");
+			mav.setViewName("active");
+			return mav;
 		} else {
-			return "register";
+			mav.setViewName("register");
+			return mav;
 		}
 	}
-	@RequestMapping(method=RequestMethod.GET,value="/h4")
-	public String getVerification() {
-		return "verification";
+
+	@RequestMapping(method = RequestMethod.GET, value = "/h4")
+	public void getVerification(HttpServletResponse response, HttpSession session) throws IOException {
+		ValidationCodeUtil vCode = new ValidationCodeUtil(120, 35, 5, 50);
+		response.setContentType("image/jpeg");
+		vCode.write(response.getOutputStream());
+		// 将验证码的值存入到session 中
+		session.setAttribute("registerverificationcode", vCode.getCode());
 	}
 
 }

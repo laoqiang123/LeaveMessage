@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -15,6 +14,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.test.domain.User;
 import com.example.test.service.UserService;
@@ -35,15 +35,19 @@ public class LoginController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/h1")
-	public String initLogin(ModelMap model) throws IOException {
+	public String initLogin(ModelMap model) {
 		model.addAttribute("user", new User());
 		return "login";
 	}
-	@RequestMapping(method=RequestMethod.GET,value="/h4")
-	public String getVerification() {
-		return "verification";
+
+	@RequestMapping(method = RequestMethod.GET, value = "/h4")
+	public void getVerification(HttpServletResponse response, HttpSession session) throws IOException {
+		ValidationCodeUtil vCode = new ValidationCodeUtil(120, 35, 5, 50);
+		response.setContentType("image/jpeg");
+		vCode.write(response.getOutputStream());
+		// 将验证码的值存入到session 中
+		session.setAttribute("loginverificationcode", vCode.getCode());
 	}
-	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/h2")
 	public String forgetPass(ModelMap model) {
@@ -52,29 +56,37 @@ public class LoginController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/h3")
-	public String login(@Valid @ModelAttribute("user") User user, Errors error, HttpSession session)
+	public ModelAndView login(@Valid @ModelAttribute("user") User user, Errors error, HttpSession session)
 			throws SQLException {
+		ModelAndView mav = new ModelAndView();
 		// 验证用户的信息，根据权限进入相应的界面
-		if (error.hasFieldErrors("name") || error.hasFieldErrors("pass")||error.hasFieldErrors("verification")) {
-			return "login";
-		}if(!session.getAttribute("verification").equals(user.getVerification())) {
-			return "login";
+		if (error.hasFieldErrors("name") || error.hasFieldErrors("pass") || error.hasFieldErrors("verification")) {
+			mav.setViewName("login");
+			return mav;
+		}
+		if (!session.getAttribute("loginverificationcode").equals(user.getVerification())) {
+			mav.setViewName("login");
+			mav.addObject("loginverificationerrormessage", "login verification is error");
+			return mav;
 		}
 		com.example.test.javabean.User u = new com.example.test.javabean.User();
 		u.setUserName(user.getName());
 		u.setUserPass(user.getPass());
 		com.example.test.javabean.User u1 = us.login(u);
 		if (u1 == null) {
-			System.out.println("user login error");
-			return "login";
+			mav.setViewName("login");
+			mav.addObject("loginerror", "user not exist or not active!");
+			return mav;
 		} else {
 			// 管理员进入管理界面
 			if (user.getName().equals("root") && user.getPass().equals("rootroot")) {
-				return "redirect:/manage/h1";
+				mav.setViewName("redirect:/manage/h1");
+				return mav;
 			}
 			// 将用户的登录信息存放到session 中
 			session.setAttribute("user", u1);
-			return "redirect:/board/h4";
+			mav.setViewName("redirect:/board/h4");
+			return mav;
 
 		}
 	}

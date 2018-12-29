@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.stereotype.Service;
-
 import com.example.test.daoimpl.UserDaoImpl;
 import com.example.test.javabean.User;
 
@@ -75,17 +73,21 @@ public class UserService {
 	public int updatePass(User user) throws SQLException {
 		return udi.updateUserByOldPass(user);
 	}
+
 	/**
 	 * 查询所有的用户
+	 * 
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<User> selectAllUser() throws SQLException{
+	public List<User> selectAllUser() throws SQLException {
 		List<User> list = udi.selectAllUser();
 		return list;
 	}
+
 	/**
 	 * 删除指定的用户
+	 * 
 	 * @param user
 	 * @return
 	 * @throws SQLException

@@ -115,14 +115,18 @@ public class BoradController {
 
 	public List<com.example.test.javabean.Board> selectBoardByPage(int page) throws SQLException {
 		List<com.example.test.javabean.Board> list = bs.selectAllBoard(page);
-		for (int i = 0; i < list.size(); i++) {
-			List<Reply> listReply = rs.selectPublishDateByBoardId(list.get(i));
-			if (listReply != null) {
-				list.get(i).setRecentReplyDate(listReply.get(0).getPublishDate());
-				list.get(i).setReplyCount(listReply.size());
+		if (list != null) {
+			for (int i = 0; i < list.size(); i++) {
+				List<Reply> listReply = rs.selectPublishDateByBoardId(list.get(i));
+				if (listReply != null) {
+					list.get(i).setRecentReplyDate(listReply.get(0).getPublishDate());
+					list.get(i).setReplyCount(listReply.size());
+				}
 			}
+			return list;
+		} else {
+			return null;
 		}
-		return list;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/h3")

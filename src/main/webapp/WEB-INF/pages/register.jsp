@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -22,7 +23,7 @@
 			</tr>
 			<tr>
 				<td><form:label path="pass">pass:</form:label></td>
-				<td><form:input path="pass" /></td>
+				<td><form:password path="pass" /></td>
 				<td><form:errors cssClass="error" path="pass" /></td>
 			</tr>
 			<tr>
@@ -31,10 +32,15 @@
 				<td><form:errors cssClass="error" path="email" /></td>
 			</tr>
 			<tr>
-			<td><form:label path="verification">Verification code</form:label></td>
-			<td><form:input path="verification"></form:input></td>
-			<td><img src="h4" /></td>
-			<td><form:errors cssClass="error" path="verification" /></td>
+				<td><form:label path="verification">verification code:</form:label></td>
+				<td><form:input path="verification"></form:input></td>
+				<td><img src="h4" /></td>
+				<td><form:errors cssClass="error" path="verification" /></td>
+				<c> <c:if test="${!empty registerverificationerrormessage}">
+					<td><div class="error">
+							<c:out value="${registerverificationerrormessage}" />
+						</div></td>
+				</c:if>
 			</tr>
 			<tr>
 				<td><input type="submit" value="submit" /></td>

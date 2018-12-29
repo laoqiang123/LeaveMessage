@@ -10,7 +10,7 @@
 <body>
 	<div align="center">
 		<h3>Welcome to visit reply page</h3>
-		<div style="border-style: dotted; width: 500px;">
+		<div style="border-style: dotted; width: 600px;">
 			<font>${board.boardName}</font>
 		</div>
 		<table cellpadding="5px" width="500px" cellspacing="0"
@@ -26,7 +26,7 @@
 			</c:if>
 			<c:set var="p" scope="page" value="${p}"></c:set>
 			<tr>
-				<td colspan="3" align="center"><c:choose>
+				<td align="left"><c:choose>
 						<c:when test="${p>0}">
 							<a href="<c:url value="/reply/h1?page=${p-1}"/>">pre page</a>
 						</c:when>
@@ -36,7 +36,8 @@
 					</c:choose></td>
 				<td><a href="http://localhost:9999/LeaveMessageSystem/reply/h2"
 					style="align: center">add reply</a></td>
-				<td colspan="3" align="center"><c:choose>
+				<td align="center"><a href="http://localhost:9999/LeaveMessageSystem/board/h4">go back</a></a></td>
+				<td colspan="2" align="right"><c:choose>
 						<c:when test="${p<max}">
 							<a href="<c:url value="/reply/h1?page=${p+1}"/>">next page</a>
 						</c:when>

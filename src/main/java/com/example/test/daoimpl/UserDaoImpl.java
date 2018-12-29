@@ -56,7 +56,7 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public User selectUserByLogin(User user) throws SQLException {
 		// TODO Auto-generated method stub
-		String sql = "select * from user where userName=? and userPass =?";
+		String sql = "select * from user where userName=? and userPass =? and active =1";
 		List<User> list = temple.query(sql, new UserRowMapper(), user.getUserName(), user.getUserPass());
 		if (list.size() == 0) {
 			return null;
@@ -109,7 +109,7 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<User> selectAllUser() throws SQLException {
 		// TODO Auto-generated method stub
-		String sql = "select userId ,userName from user where active  = 1";
+		String sql = "select userId ,userName from user";
 		List<User> list = temple.query(sql, new UserRowMapper());
 		if (list == null) {
 			return null;

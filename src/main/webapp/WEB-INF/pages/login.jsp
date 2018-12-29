@@ -10,7 +10,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>Welcome to LeaveMessage System</h1>
+	<h1>Welcome to  LeaveMessage System</h1>
 	<form:form modelAttribute="user" action="h3">
 		<table>
 			<tr>
@@ -21,14 +21,26 @@
 			</tr>
 			<tr>
 				<td><form:label path="pass">userpass:</form:label></td>
-				<td><form:input path="pass"></form:input></td>
+				<td><form:password path="pass"></form:password></td>
 				<td><form:errors cssClass="error" path="pass" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="verification">Verification code</form:label></td>
+				<td><form:label path="verification">verification code:</form:label></td>
 				<td><form:input path="verification"></form:input></td>
 				<td><img src="h4" /></td>
 				<td><form:errors cssClass="error" path="verification" /></td>
+				<c:if test="${!empty loginverificationerrormessage}">
+					<td><div class="error">
+							<c:out value="${loginverificationerrormessage}" />
+						</div></td>
+				</c:if>
+
+				<c:if test="${!empty loginerror}">
+					<td><div class="error">
+							<c:out value="${loginerror}" />
+						</div></td>
+				</c:if>
+
 			</tr>
 			<tr>
 				<td><input type="button" value="forget"
